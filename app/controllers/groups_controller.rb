@@ -1,15 +1,13 @@
 class GroupsController < ApplicationController
   before_action :authenticate_user! , only: [:new, :create, :edit, :update, :destroy, :join, :quit]
-  before_action :find_group_and_check_permission, only: [:new, :create, :edit, :update, :destroy]
+  before_action :find_group_and_check_permission, only: [:edit, :update, :destroy]
   def index
     @groups = Group.all
   end
-
   def show
     @group = Group.find(params[:id])
     @posts = @group.posts.recent.paginate(:page => params[:page], :per_page => 5)
   end
-
   def edit
   end
 
@@ -35,8 +33,6 @@ class GroupsController < ApplicationController
       render :edit
     end
   end
-
-
 
   def destroy
     @group.destroy
@@ -69,7 +65,8 @@ def quit
 
   redirect_to group_path(@group)
 end
-  private
+
+private
 
 def find_group_and_check_permission
   @group = Group.find(params[:id])
